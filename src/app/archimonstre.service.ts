@@ -1,6 +1,5 @@
 import { inject, Service } from '@angular/core';
 import { Archimonstre, ArchimonstreList } from './archimonstre.model';
-import { ARCHIMONSTRE_LIST } from './archimonstre-list';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -27,6 +26,11 @@ export class ArchimonstreService {
             'air',
             'neutre',
         ];
+    }
+
+    updateArchimonstre(archimonstre: Archimonstre): Observable<Archimonstre> {
+        const url = this.ARCHIMONSTRE_API_URL + '/' + archimonstre.id;
+        return this.http.put<Archimonstre>(url, archimonstre)
     }
 
 }

@@ -48,7 +48,7 @@
                   <th scope="row">Points de vie</th>
                   <td>
                     <div class="input-group">
-                      <button (click)="decrementLife()" class="btn btn-outline-secondary" [disabled]="archimonstreLife.value <= ARCHIMONSTRE_RULES.MIN_LIFE">
+                      <button type="button" (click)="decrementLife()" class="btn btn-outline-secondary" [disabled]="archimonstreLife.value <= ARCHIMONSTRE_RULES.MIN_LIFE">
                         -
                       </button>
                       <input
@@ -56,7 +56,7 @@
                         class="form-control text-center"
                         formControlName="life"
                       />
-                      <button (click)="incrementLife()" class="btn btn-outline-secondary" [disabled]="archimonstreLife.value >= ARCHIMONSTRE_RULES.MAX_LIFE">
+                      <button type="button" (click)="incrementLife()" class="btn btn-outline-secondary" [disabled]="archimonstreLife.value >= ARCHIMONSTRE_RULES.MAX_LIFE">
                         +
                       </button>
                     </div>
@@ -66,7 +66,7 @@
                   <th scope="row">Dégâts</th>
                   <td>
                     <div class="input-group">
-                      <button (click)="decrementDamage()" class="btn btn-outline-secondary" [disabled]="archimonstreDamage.value <= ARCHIMONSTRE_RULES.MIN_DAMAGE">
+                      <button type="button" (click)="decrementDamage()" class="btn btn-outline-secondary" [disabled]="archimonstreDamage.value <= ARCHIMONSTRE_RULES.MIN_DAMAGE">
                         -
                       </button>
                       <input
@@ -74,7 +74,7 @@
                         class="form-control text-center"
                         formControlName="damage"
                       />
-                      <button (click)="incrementDamage()" class="btn btn-outline-secondary" [disabled]="archimonstreDamage.value >= ARCHIMONSTRE_RULES.MAX_DAMAGE">
+                      <button type="button" (click)="incrementDamage()" class="btn btn-outline-secondary" [disabled]="archimonstreDamage.value >= ARCHIMONSTRE_RULES.MAX_DAMAGE">
                         +
                       </button>
                     </div>
@@ -129,12 +129,13 @@
             </table>
             <div class="d-flex justify-content-between mt-4">
               <button
+                type="button"
                 class="btn btn-link text-decoration-none text-warning"
                 [routerLink]="['/archimonstres', archimonstre.id]"
               >
                 RETOUR
               </button>
-              <button [class.text-secondary]="form.invalid" [class.text-warning]="form.valid" class="btn btn-link text-decoration-none" [disabled]="form.invalid">
+              <button type="submit" [class.text-secondary]="form.invalid" [class.text-warning]="form.valid" class="btn btn-link text-decoration-none" [disabled]="form.invalid">
                 SAUVEGARDER LES CHANGEMENTS
               </button>
             </div>

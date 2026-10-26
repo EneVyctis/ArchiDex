@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ArchimonstreService } from '../../archimonstre.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ARCHIMONSTRE_RULES, getArchimonstreColor} from '../../archimonstre.model';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -14,6 +14,7 @@ import { catchError, map, of } from 'rxjs';
 })
 export class ArchimonstreEdit {
   readonly route = inject(ActivatedRoute);
+  readonly router = inject(Router);
   readonly archiService = inject(ArchimonstreService);
   readonly archimonstreiD = signal(
     Number(this.route.snapshot.paramMap.get('id'))
@@ -120,6 +121,25 @@ export class ArchimonstreEdit {
   }
 
   onSubmit() {
-    console.log(this.form.value);
+
+    const isFormValid = this.form.valid;
+    const archimonstre = this.archimonstre();
+
+    // Check if both the form and the initial archimonstre are valid
+    if(isFormValid && archimonstre) {
+      const  updatedArchimonstre = {
+        // Copies each archi properties, and the overwrites what needs to be.
+        ...archimonstre,
+        name: this.archimonstreName.value,
+        life: this.archimonstreLife.value,
+        damage: this.archimonstreDamage.value,
+        resistances: this.archimonstreResistanceList.value
+      };
+
+      // Redirect to the profile page
+      this.archiService.updateArchimonstre(updatedArchimonstre).subscribe(() => {
+        this.router.navigate(['/archimonstres', archimonstre.id]);
+      })
+    }
   }
 }
