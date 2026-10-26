@@ -1,0 +1,153 @@
+<div class="container mt-5">
+  @if(archimonstre(); as archimonstre){
+  <div class="card">
+    <div class="row g-0">
+      <div
+        class="col-md-4 d-flex align-items-center justify-content-center bg-light"
+      > 
+        <img
+          [src]="archimonstre.picture"
+          class="img-fluid rounded-start"
+          [alt]="archimonstre.name"
+        />
+      </div>
+      <div class="col-md-8">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="card-body">
+            <h2 class="card-title">{{ archimonstre.name }}</h2>
+            <table class="table">
+              <tbody>
+                <tr>
+                  <th scope="row">Name</th>
+                  <td>
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Nom du Pokémon"
+                      formControlName="name"
+                      [class.is-invalid]="archimonstreName.invalid"
+                    />
+                    @if(archimonstreName.hasError('required')) {
+                        <div class="invalid-feedback">Veuillez renseigner ce champ.</div>
+                    }
+                    @if(archimonstreName.hasError('minlength')) {
+                        <div class="invalid-feedback">Veuillez saisir un nom plus long. (Minimum: {{
+                          archimonstreName.getError('minlength').requiredLength  }})
+                        </div>
+                    }
+                    @if(archimonstreName.hasError('maxlength')) {
+                        <div class="invalid-feedback">Veuillez saisir un nom plus court. (Maximum: {{
+                            archimonstreName.getError('maxlength').requiredLength}})</div>
+                    }
+                    @if(archimonstreName.hasError('pattern')) {
+                        <div class="invalid-feedback">Veuillez n'utiliser que des lettres</div>
+                    }
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Points de vie</th>
+                  <td>
+                    <div class="input-group">
+                      <button (click)="decrementLife()" class="btn btn-outline-secondary" [disabled]="archimonstreLife.value <= ARCHIMONSTRE_RULES.MIN_LIFE">
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        class="form-control text-center"
+                        formControlName="life"
+                      />
+                      <button (click)="incrementLife()" class="btn btn-outline-secondary" [disabled]="archimonstreLife.value >= ARCHIMONSTRE_RULES.MAX_LIFE">
+                        +
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Dégâts</th>
+                  <td>
+                    <div class="input-group">
+                      <button (click)="decrementDamage()" class="btn btn-outline-secondary" [disabled]="archimonstreDamage.value <= ARCHIMONSTRE_RULES.MIN_DAMAGE">
+                        -
+                      </button>
+                      <input
+                        type="number"
+                        class="form-control text-center"
+                        formControlName="damage"
+                      />
+                      <button (click)="incrementDamage()" class="btn btn-outline-secondary" [disabled]="archimonstreDamage.value >= ARCHIMONSTRE_RULES.MAX_DAMAGE">
+                        +
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Resistances</th>
+                  <td>
+                    @for(resistance of archimonstreResistanceList.controls; track resistance; let index = $index) {
+                    <button
+                      type="button"
+                      class="btn btn-secondary btn-sm rounded-pill me-2"
+                      [style.backgroundColor] = "getArchimonstreResistanceColor(resistance.value)"
+                      (click) = "archimonstreResistanceList.removeAt(index)"
+                    >
+                      {{ resistance.value }} <span class="badge">x</span>
+                    </button>
+                    }
+                    @if(archimonstreResistanceList.hasError('required')){
+                        <p class="text-danger">Veuillez sélectionner au moins un type de résistance.</p>
+                    }
+                    @if(archimonstreResistanceList.hasError('maxlength')){
+                        <p class="text-danger">Veuillez sélectionner au maximum {{ ARCHIMONSTRE_RULES.MAX_RES}} résistances</p>
+                    }
+                    @if(archimonstreResistanceList.hasError('minlength')){
+                        <p class="text-danger">Veuillez sélectionner au minimum {{ ARCHIMONSTRE_RULES.MIN_RES}} résistances</p>
+                    }
+                    <div class="row mt-3">
+                      @for(resistance of archiService.getArchimonstreResistanceList(); track
+                      resistance) {
+                      <div class="col-md-4">
+                        <div class="form-check">
+                          <input
+                            #checkbox
+                            (change)="onArchimonstreResistanceChange(resistance, checkbox.checked)"
+                            [checked]="isArchimonstreResistanceSelected(resistance)"
+                            class="form-check-input"
+                            type="checkbox"
+                            [value]="resistance"
+                            [id]="resistance"
+                          />
+                          <label class="form-check-label" [for]="resistance">
+                            {{ resistance }}
+                          </label>
+                        </div>
+                      </div>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="d-flex justify-content-between mt-4">
+              <button
+                class="btn btn-link text-decoration-none text-warning"
+                [routerLink]="['/archimonstres', archimonstre.id]"
+              >
+                RETOUR
+              </button>
+              <button [class.text-secondary]="form.invalid" [class.text-warning]="form.valid" class="btn btn-link text-decoration-none" [disabled]="form.invalid">
+                SAUVEGARDER LES CHANGEMENTS
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  } @else {
+            <div class="d-flex justify-content-center">
+              <div class="spinner-border black" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+    }
+</div>

@@ -1,0 +1,46 @@
+<div class="container mb-5">
+    <div class="row">
+        <div class="col-4 offset-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="search" class="form-label">Recherche un Archimonstre</label>
+                        <input id="search" type="text" class="form-control" name ="searchTerm" placeholder="Recherche un Archimonstre" #searchField [value]="searchTerm()" (input)="searchTerm.set(searchField.value)"> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        @if(loading()){
+            <div class="d-flex justify-content-center">
+                <div class="spinner-border black" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        }
+        @for(archi of archimonstreListFiltered(); track archi.id) {
+            <div [routerLink]="['/archimonstres', archi.id]" role="button" class="col-md-4">
+                <div class="card mb-3" appArchimonstreBorder [archimonstreRes]="archi.resistances[0]">
+                    <div class="row g-0">
+                        <div class="col-md-4 d-flex align-items-center justify-content-center bg-light">
+                            <img [src]="archi.picture" [alt]="archi.name" class="img-fluid rounded-start">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ archi.name }}</h5>
+                                <h6 class="card-subtitle mb-2 text-body-secondary">Level : {{ difficulty(archi) }}</h6>
+                                <p class="card-text">{{ archi.created | date: 'dd/MM/yyyy' }}</p>
+                                <p class="card-text">Points de vie: {{ archi.life }}</p>
+                                <p class="card-text">Dégâts: {{ archi.damage }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,68 @@
+<div class="container mt-5">
+  @if(archimonstre(); as archimonstre) {
+  <div class="card">
+    <div class="row g-0">
+      <div
+        class="col-md-4 d-flex align-items-center justify-content-center bg-light"
+      >
+        <img
+          [src]="archimonstre.picture"
+          class="img-fluid rounded-start"
+          [alt]="archimonstre.name"
+        />
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h2 class="card-title">{{ archimonstre.name }}</h2>
+          <table class="table">
+            <tbody>
+              <tr>
+                <th scope="row">Points de vie</th>
+                <td>{{ archimonstre.life }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Dégâts</th>
+                <td>{{ archimonstre.damage }}</td>
+              </tr>
+              <tr>
+                <th scope="row">resistances</th>
+                <td>
+                  @for(type of archimonstre.resistances; track type) {
+                  <span class="badge rounded-pill bg-secondary me-1">{{
+                    type
+                  }}</span>
+                  }
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Date de création</th>
+                <td>{{ archimonstre.created | date : "dd/MM/yyyy" }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="d-flex justify-content-between mt-4">
+            <button
+              class="btn btn-link text-decoration-none text-warning"
+              routerLink="/archimonstres"
+            >
+              RETOUR
+            </button>
+            <button class="btn btn-link text-decoration-none text-warning" [routerLink]="['/archimonstres/edit', archimonstre.id]">
+              ÉDITER
+            </button>
+            <button class="btn btn-link text-decoration-none text-warning">
+              SUPPRIMER
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  } @else {
+      <div class="d-flex justify-content-center">
+        <div class="spinner-border black" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+  }
+</div>
