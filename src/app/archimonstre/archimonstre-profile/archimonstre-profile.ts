@@ -1,8 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ArchimonstreService } from '../../archimonstre.service';
 import { DatePipe } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { catchError, map, of } from 'rxjs';
 
 @Component({
   imports: [RouterLink, DatePipe],
@@ -16,5 +17,13 @@ export class ArchimonstreProfile {
 
   private readonly archimonstreId = Number(this.route.snapshot.paramMap.get('id'));
 
-  readonly archimonstre = toSignal(this.archimonstreService.getArchimonstreByID(this.archimonstreId));
+  private readonly archimonstreResponse = toSignal(this.archimonstreService.getArchimonstreByID(this.archimonstreId).pipe(
+    map((archi) => ({ value: archi, error: undefined})),
+    catchError((error) => of({value: undefined, error}))
+  ));
+
+  readonly loading = computed(() => this.archimonstreResponse === undefined);
+  readonly error = computed(() => this.archimonstreResponse()?.error != undefined)
+
+  readonly archimonstre = computed(() => this.archimonstreResponse()?.value);
 }
