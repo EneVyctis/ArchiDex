@@ -33,4 +33,9 @@ export class ArchimonstreService {
         return this.http.put<Archimonstre>(url, archimonstre)
     }
 
+    deleteArchimonstre(id: number): Observable<void> {
+        const url = this.ARCHIMONSTRE_API_URL + '/' + id;
+        return this.http.delete<void>(url);
+    }
+
 }

@@ -50,7 +50,7 @@
             <button class="btn btn-link text-decoration-none text-warning" [routerLink]="['/archimonstres/edit', archimonstre.id]">
               ÉDITER
             </button>
-            <button class="btn btn-link text-decoration-none text-warning">
+            <button (click)="deleteArchimonstre()" class="btn btn-link text-decoration-none text-warning">
               SUPPRIMER
             </button>
           </div>
