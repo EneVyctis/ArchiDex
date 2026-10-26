@@ -1,9 +1,10 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { ArchimonstreService } from '../../archimonstre.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ARCHIMONSTRE_RULES, getArchimonstreColor} from '../../archimonstre.model';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { catchError, map, of } from 'rxjs';
 
 @Component({
   imports: [RouterLink, ReactiveFormsModule],
@@ -17,9 +18,17 @@ export class ArchimonstreEdit {
   readonly archimonstreiD = signal(
     Number(this.route.snapshot.paramMap.get('id'))
   ).asReadonly();
-  readonly archimonstre = toSignal(
-    this.archiService.getArchimonstreByID(this.archimonstreiD())
-  );
+
+  private readonly archimonstreResponse = toSignal(
+    this.archiService.getArchimonstreByID(this.archimonstreiD()).pipe(
+      map((archi) => ({value: archi, error: undefined})),
+      catchError((error) => of({value: undefined, error}))
+    ));
+
+  readonly loading = computed(() => this.archimonstreResponse() === undefined);
+  readonly error = computed(() => this.archimonstreResponse()?.error != undefined);
+
+  readonly archimonstre = computed(() => this.archimonstreResponse()?.value);
   readonly ARCHIMONSTRE_RULES = ARCHIMONSTRE_RULES;
   
   readonly form = new FormGroup({
