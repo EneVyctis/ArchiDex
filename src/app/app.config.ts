@@ -5,27 +5,39 @@ import { ArchimonstreProfile } from './archimonstre/archimonstre-profile/archimo
 import { PageNotFound } from './page-not-found/page-not-found';
 import { ArchimonstreEdit } from './archimonstre/archimonstre-edit/archimonstre-edit';
 import { provideHttpClient } from '@angular/common/http';
+import { AuthGuard } from './core/auth/auth.guard';
+import { Login } from './login/login';
 
 const routes: Routes = [
   {
-    path: 'archimonstres/edit/:id',
-    component: ArchimonstreEdit,
-    title: "Edition d'un archimonstre"
-  },
-  { 
-    path: 'archimonstres', 
-    component: ArchimonstreList,
-    title: 'ArchiDex'
+    path: 'login',
+    component: Login,
+    title: 'Connexion',
   },
   {
-    path: 'archimonstres/:id',
-    component: ArchimonstreProfile,
-    title: 'Archimonstre'
+    path: 'archimonstres',
+    canActivateChild: [AuthGuard],
+    children: [
+    {
+      path: 'edit/:id',
+      component: ArchimonstreEdit,
+      title: "Edition d'un archimonstre"
+    },
+    { 
+      path: '', 
+      component: ArchimonstreList,
+      title: 'ArchiDex',
+    },
+    {
+      path: ':id',
+      component: ArchimonstreProfile,
+      title: 'Archimonstre'
+    }]
   },
   {
     path: '',
     redirectTo: '/archimonstres',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: '**',
