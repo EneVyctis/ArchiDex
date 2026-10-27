@@ -7,6 +7,7 @@ import { ArchimonstreEdit } from './archimonstre/archimonstre-edit/archimonstre-
 import { provideHttpClient } from '@angular/common/http';
 import { AuthGuard } from './core/auth/auth.guard';
 import { Login } from './login/login';
+import { ArchimonstreAdd } from './archimonstre/archimonstre-add/archimonstre-add';
 
 const routes: Routes = [
   {
@@ -18,21 +19,27 @@ const routes: Routes = [
     path: 'archimonstres',
     canActivateChild: [AuthGuard],
     children: [
-    {
-      path: 'edit/:id',
-      component: ArchimonstreEdit,
-      title: "Edition d'un archimonstre"
-    },
-    { 
-      path: '', 
-      component: ArchimonstreList,
-      title: 'ArchiDex',
-    },
-    {
-      path: ':id',
-      component: ArchimonstreProfile,
-      title: 'Archimonstre'
-    }]
+      {
+        path: 'add',
+        component: ArchimonstreAdd,
+        title: 'Ajouter un archimonstre'
+      },
+      {
+        path: 'edit/:id',
+        component: ArchimonstreEdit,
+        title: "Edition d'un archimonstre"
+      },
+      { 
+        path: '', 
+        component: ArchimonstreList,
+        title: 'ArchiDex',
+      },
+      {
+        path: ':id',
+        component: ArchimonstreProfile,
+        title: 'Archimonstre'
+      },
+    ]
   },
   {
     path: '',

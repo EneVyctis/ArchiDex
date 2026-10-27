@@ -38,4 +38,10 @@ export class ArchimonstreService {
         return this.http.delete<void>(url);
     }
 
+    // Omit allows to omit some properties from a T object/class...
+    addArchimonstre(archimonstre: Omit<Archimonstre, 'id'>): Observable<Archimonstre> {
+        const url= this.ARCHIMONSTRE_API_URL;
+        return this.http.post<Archimonstre>(url, archimonstre);
+    }
+
 }
